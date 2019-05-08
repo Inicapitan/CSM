@@ -13,6 +13,7 @@ namespace CSM.Models
         public bool Payed { get; set; }
         public DateTime Date { get; set; }
 
-        //public ICollection<Client> Clients { get; set; }
+        public Client Client { get; set; }
+        public Service Service{ get; set; }
     }
 }

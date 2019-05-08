@@ -14,7 +14,7 @@ namespace CSM.Models
         public string Gender { get; set; }
         public int Phone { get; set; }
         public string Mail { get; set; }
-        
-        //public ICollection<Schedule> Schedule { get; set; }
+
+        public ICollection<Schedule> Schedules { get; set; }
     }
 }

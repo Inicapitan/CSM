@@ -124,8 +124,8 @@ namespace CSM.Controllers
                 return NotFound();
             }
 
-            var stock = await _context.Stock
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var stock = await _context.Stock.FirstOrDefaultAsync(m => m.ID == id);
+
             if (stock == null)
             {
                 return NotFound();

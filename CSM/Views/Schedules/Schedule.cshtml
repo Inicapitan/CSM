@@ -1,0 +1,12 @@
+﻿@model IEnumerable<CSM.Models.CalendarEvent>
+
+@{
+    ViewData["Title"] = "Agenda";
+}
+
+<h1>Agenda</h1>
+
+
+    <calendar month="05" year="2019" events="@Model.ToList()" />
+
+

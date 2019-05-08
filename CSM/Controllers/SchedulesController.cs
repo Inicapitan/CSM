@@ -22,7 +22,17 @@ namespace CSM.Controllers
         // GET: Schedules
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Schedule.ToListAsync());
+            List<Schedule> fullschedule = new List<Schedule>();
+            var schedule = await _context.Schedule.ToListAsync();
+            foreach(var s in schedule)
+            {
+                s.Client = await _context.Client.FirstOrDefaultAsync(c => c.ID == s.ClientID);
+                s.Service = await _context.Service.FirstOrDefaultAsync(ser => ser.ID == s.ServiceID);
+                fullschedule.Add(s);
+            }
+
+
+            return View(fullschedule);
         }
 
         // GET: Schedules/Details/5
@@ -33,8 +43,10 @@ namespace CSM.Controllers
                 return NotFound();
             }
 
-            var schedule = await _context.Schedule
-                .FirstOrDefaultAsync(m => m.ID == id);
+            var schedule = await _context.Schedule.FirstOrDefaultAsync(m => m.ID == id);
+            schedule.Client = await _context.Client.FirstOrDefaultAsync(c => c.ID == schedule.ClientID);
+            schedule.Service = await _context.Service.FirstOrDefaultAsync(s => s.ID == schedule.ServiceID);
+
             if (schedule == null)
             {
                 return NotFound();
@@ -145,6 +157,27 @@ namespace CSM.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Schedule()
+        {
+            List<Schedule> fullschedule = new List<Schedule>();
+            List<CalendarEvent> events = new List<CalendarEvent>();
+
+            var schedule = await _context.Schedule.ToListAsync();
+            foreach (var s in schedule)
+            {
+                s.Client = await _context.Client.FirstOrDefaultAsync(c => c.ID == s.ClientID);
+                s.Service = await _context.Service.FirstOrDefaultAsync(ser => ser.ID == s.ServiceID);
+                fullschedule.Add(s);
+
+                var title = string.Format("{0} {1} // {2}",s.Client.Name,s.Client.Surname,s.Service.Name);
+                var evento = new CalendarEvent { Title=title, Date=s.Date, Type="info"};
+                events.Add(evento);
+
+            }
+
+
+            return View(events);
+        }
         private bool ScheduleExists(int id)
         {
             return _context.Schedule.Any(e => e.ID == id);
